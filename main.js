@@ -6,6 +6,7 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
+import GeoJSON from 'ol/format/GeoJSON';
 import { fromLonLat } from 'ol/proj';
 import { Style, Icon } from 'ol/style';
 
@@ -23,11 +24,6 @@ const map = new Map({
   }),
 });
 
-// Capa de marcadores
-const markerLayer = new VectorLayer({
-  source: new VectorSource(),
-});
-map.addLayer(markerLayer);
 
 // Configura un estilo para los marcadores
 const markerStyle = new Style({
@@ -38,10 +34,21 @@ const markerStyle = new Style({
   }),
 });
 
+// Capa de marcadores
+const markerLayer = new VectorLayer({
+  source: new VectorSource({
+      url: './data.geojson',
+      format: new GeoJSON(),
+
+  })
+});
+map.addLayer(markerLayer);
+
 
 
 // Manejo del botón "Guardar Marcador"
 const guardarButton = document.getElementById('guardar');
+
 guardarButton.addEventListener('click', () => {
   const latitudInput = document.getElementById('latitud').value;
   const longitudInput = document.getElementById('longitud').value;
@@ -63,9 +70,4 @@ guardarButton.addEventListener('click', () => {
     }
   }
 });
-
-
-
-
-
 
