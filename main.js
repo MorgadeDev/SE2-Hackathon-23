@@ -1,6 +1,7 @@
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
+import Overlay from 'ol/Overlay';
 import OSM from 'ol/source/OSM';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
@@ -11,18 +12,31 @@ import GeoJSON from 'ol/format/GeoJSON';
 import { fromLonLat } from 'ol/proj';
 import { Style, Icon, Circle, Fill, Stroke, Text } from 'ol/style';
 
+
+const container = document.getElementById('popup');
+const content = document.getElementById('popup-content');
+const overlay = new Overlay({
+  element: container,
+  autoPan: {
+    animation: {
+      duration: 250,
+    },
+  },
+});
+
 // Configura el mapa
 const map = new Map({
-  target: 'map',
-  layers: [
-    new TileLayer({
-      source: new OSM(),
+    target: 'map',
+    overlays: [overlay],
+    layers: [
+        new TileLayer({
+            source: new OSM(),
+        }),
+    ],
+    view: new View({
+        center: fromLonLat([-57.542611, -38.005477]), // Centro del mapa (coordenadas iniciales)
+        zoom: 12, // Nivel de zoom inicial
     }),
-  ],
-  view: new View({
-    center: fromLonLat([-57.542611, -38.005477]), // Centro del mapa (coordenadas iniciales)
-    zoom: 12, // Nivel de zoom inicial
-  }),
 });
 
 
@@ -67,13 +81,16 @@ map.addLayer(markerLayer);
 
 // Agregar un evento de clic al mapa para manejar los marcadores interactivos
 map.on('singleclick', function (event) {
+    const coordinate = event.coordinate;
+
+    overlay.setPosition(coordinate);
     map.forEachFeatureAtPixel(event.pixel, function (feature, layer) {
         // Verifica que se hizo clic en un marcador
         if (feature) {
             // Define la acción que se ejecutará al hacer clic en el marcador
             // Por ejemplo, muestra una alerta con las coordenadas
-            const coords = feature.getGeometry().getCoordinates();
-            alert(`Marcador clickeado en coordenadas: ${coords}`);
+            const url = feature.get('features')[0].get('image');
+            content.innerHTML = `<img src="${url}" />`;
         }
     });
 });
