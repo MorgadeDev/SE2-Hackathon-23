@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Mapa con Marcadores</title>
+    <link
+      rel="stylesheet"
+      href="style.css"
+    />
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    
+    <div id="menu" class="menu">
+      <h2>Ingrese los datos:</h2>
+      <label for="latitud">Latitud:</label>
+      <input type="text" id="latitud" placeholder="Ej. -38.005477" />
+      <br />
+      <label for="longitud">Longitud:</label>
+      <input type="text" id="longitud" placeholder="Ej. -57.542611" />
+      <br />
+      <button id="guardar">Guardar Marcador</button>
+    </div>
+    
+    <script type="module" src="main.js"></script>
+
+  </body>
+</html>
